@@ -65,8 +65,18 @@ def get_items_results(task_ids, organization, headers):
                     new_date = update['fields']['Microsoft.VSTS.Common.StateChangeDate']['newValue']
                     start_date = datetime.strptime(old_date, '%Y-%m-%dT%H:%M:%S.%fZ')
                     end_date = datetime.strptime(new_date, '%Y-%m-%dT%H:%M:%S.%fZ')
-                    total_days = (end_date - start_date).days
-                    states.append([work_id, work_type, squad, old_state, old_date, new_state, new_date, total_days])
+                    total_days = round(((end_date - start_date).total_seconds()) / 3600 / 24, 2)
+                    hours_btw_dates = round(((end_date - start_date).total_seconds()) / 3600, 2)
+                    states.append([work_id,
+                                   work_type,
+                                   squad,
+                                   old_state,
+                                   old_date,
+                                   new_state,
+                                   new_date,
+                                   total_days,
+                                   hours_btw_dates
+                                   ])
                 except:
                     continue
 
@@ -89,7 +99,8 @@ def salvar_csv(states):
                      'old_date',
                      'new_state',
                      'new_date',
-                     'total_days'
+                     'total_days',
+                     'hours_btw_dates'
                      ]
         escritor_csv.writerow(cabecalho)
         for linha in processed_data:
