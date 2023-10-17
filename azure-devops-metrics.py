@@ -55,10 +55,9 @@ def get_items_results(task_ids, organization, headers):
 
             for update in updates:
                 try:
-                    # state = update['revisedDate']
                     work_id = update['workItemId']
-                    work_type = updates[0]['fields']['System.WorkItemType']['newValue']
-                    squad = updates[0]['fields']['System.NodeName']['newValue']
+                    # work_type = updates[0]['fields']['System.WorkItemType']['newValue']
+                    # squad = updates[0]['fields']['System.NodeName']['newValue']
                     old_state = update['fields']['System.State']['oldValue']
                     new_state = update['fields']['System.State']['newValue']
                     old_date = update['fields']['Microsoft.VSTS.Common.StateChangeDate']['oldValue']
@@ -68,8 +67,6 @@ def get_items_results(task_ids, organization, headers):
                     total_days = round(((end_date - start_date).total_seconds()) / 3600 / 24, 2)
                     hours_btw_dates = round(((end_date - start_date).total_seconds()) / 3600, 2)
                     states.append([work_id,
-                                   work_type,
-                                   squad,
                                    old_state,
                                    old_date,
                                    new_state,
@@ -89,12 +86,10 @@ def get_items_results(task_ids, organization, headers):
 
 
 def salvar_csv(states):
-    with open('results.csv', "w", newline="", encoding="utf-8") as arquivo_csv:
+    with open('results-states-changes.csv', "w", newline="", encoding="utf-8") as arquivo_csv:
         escritor_csv = csv.writer(arquivo_csv, delimiter=";")
         # Escrever o cabeçalho
         cabecalho = ['id',
-                     'type',
-                     'squad',
                      'old_state',
                      'old_date',
                      'new_state',
